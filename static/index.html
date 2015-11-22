@@ -47,12 +47,36 @@
 				  <div id="navbar" class="navbar-collapse collapse">
 					   <ul class="nav navbar-nav navbar-right">
 						    <li><a ng-href="/">Início</a></li>
-						    <li><a href="add">Sobre</a></li>
+						    <li><a href="#" data-toggle="modal" data-target="#info-modal">Sobre</a></li>
 					   </ul>
 				  </div>
 			 </div>
 		</nav> 
 		<div ng-view></div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+			  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+					    <div class="modal-header">
+					     	<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       	<h4 class="modal-title" id="modalLabel">Sobre</h4>
+					    </div>
+				     	<div class="modal-body">
+				        	 Essa aplicação foi escrita em Golang, AunglarJS, MySQL e Bootstrap.
+				        	<br/>
+				        	<br/>
+				        	 Construida por mim, Lucas Martins Ramos
+				        	<br/>
+				        	Curta ai! ;)
+				      	</div>
+				      	<div class="modal-footer">
+				 			<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+				     	</div>
+				    </div>
+			  </div>
+		</div> 
+		<!-- /.modal -->
 		
 	</body>
 </html>
