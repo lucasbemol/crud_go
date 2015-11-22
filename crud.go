@@ -1,18 +1,21 @@
 package main
+//@author Lucas Martins Ramos
 
 import (
-	//"fmt"
 	"log"
-	//for RESTful API
+	
+	//Para RESTful API
 	"github.com/codegangsta/martini"
 	"github.com/codegangsta/martini-contrib/binding"
-	"github.com/codegangsta/martini-contrib/render" //for rendering returning JSON
-	//for sqlite3 storage, from drivers of go-wiki: https://code.google.com/p/go-wiki/wiki/SQLDrivers
+	"github.com/codegangsta/martini-contrib/render"
+
+	//Para acesso ao database
 	"database/sql"
-	//use the initialization inside without actual use it: http://golang.org/doc/effective_go.html#blank
+	//Driver Mysql
 	_ "github.com/go-sql-driver/mysql"
 )
 
+//Define objeto Product
 type Product struct {
 	Id_product int `json:"id_product"`
 	Name string `json:"name" binding:"required"`
@@ -26,14 +29,40 @@ func main() {
 	m.Use(render.Renderer())
 
 	log.Println("Tentando se concectar na base")
-	//get database
-	db, err := sql.Open("mysql", "root:lucasbemol@tcp(localhost:3306)/crud")
+	//Configure aqui seu usuário e senha do Mysql (Deve ter permissão para crear shchema e tables,
+	//para inicar a base aconselho usar root )
+	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	//using martini-contrib/binding for receiving incoming JSON
+	log.Println("Criando database crud caso não exista")
+	_,err = db.Exec("CREATE DATABASE IF NOT EXISTS crud")
+    if err != nil {
+       panic(err)
+    }
+
+    log.Println("Usando schema crud")
+    _,err = db.Exec("USE crud")
+    if err != nil {
+       panic(err)
+    }
+
+    log.Println("Criando tabela Product caso não exita")
+	_,err = db.Exec(`CREATE TABLE IF NOT EXISTS crud.product (
+						id_product INT NOT NULL AUTO_INCREMENT,
+				  		name VARCHAR(200) NULL,
+				  		price DECIMAL(10,2) NULL,
+				  		expiration_date DATE NULL,
+				  		PRIMARY KEY (id_product));`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	
+
+	//Controller para adicionar produto
 	m.Post("/product/add/data.json", binding.Json(Product{}), func(product Product, r render.Render) {
 		if err != nil {
 			log.Println(err.Error())
@@ -59,6 +88,7 @@ func main() {
 		r.JSON(200, map[string]interface{}{"status": "success"})
 	})
 
+	//Controler para listar todos os produtos
 	m.Get("/product/list", func(r render.Render) {
 		rows, err := db.Query(`Select id_product, name, price, expiration_date
 				       From product`)
@@ -68,21 +98,19 @@ func main() {
 		}
 		defer rows.Close()
 
-		//create a Struct array
 		res := []Product{}
 		for rows.Next() {
-			//var tempID string
 			p := Product{}
 			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
-			//append things after the array
 			res = append(res, p)
 		}
 
 		r.JSON(200, map[string]interface{}{"status": "success", "results": res})
 	})
 
+	//Controller para procurar por ID
 	m.Get("/product/search/:id", func(params martini.Params, r render.Render) {
-		//define SQL
+		
 		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date
 					 From product
 					 Where id_product = ?`)
@@ -91,7 +119,7 @@ func main() {
 			return
 		}
 		defer stmt.Close()
-		//execute with parameter
+		
 		p := Product{}
 		err = stmt.QueryRow(params["id"]).Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
 
@@ -103,8 +131,9 @@ func main() {
 		r.JSON(200, map[string]interface{}{"status": "success", "results": p})
 	})
 
+	//Controller para buscar por Nome do produto
 	m.Get("/product/searchByName/:name", func(params martini.Params, r render.Render) {
-		//define SQL
+		
 		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date
 					 From product
 					 Where name like ?`)
@@ -116,7 +145,7 @@ func main() {
 		defer stmt.Close()
 
 		rows, err := stmt.Query(params["name"])
-		//execute with parameter
+		
 		res := []Product{}
 		
 		if err != nil {
@@ -126,16 +155,15 @@ func main() {
 		}
 
 		for rows.Next() {
-			//var tempID string
 			p := Product{}
 			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
-			//append things after the array
 			res = append(res, p)
 		}
 
 		r.JSON(200, map[string]interface{}{"status": "success", "results": res})
 	})
 
+	//Controller para editar produto
 	m.Put("/product/:id/data.json", binding.Json(Product{}), func(params martini.Params, product Product, r render.Render) {
 		stmt, err := db.Prepare(`Update product
 					 Set name=?, price=?, expiration_date=?
@@ -155,6 +183,7 @@ func main() {
 		r.JSON(200, map[string]interface{}{"status": "success"})
 	})
 
+	//Controller para excluir produto
 	m.Delete("/product/delete/:id", func(params martini.Params, r render.Render) {
 		stmt, err := db.Prepare(`Delete From product
 					 Where id_product = ?`)
@@ -172,8 +201,8 @@ func main() {
 		r.JSON(200, map[string]interface{}{"status": "success"})
 	})
 
+	//Mapeamento de arquivos estáticos(HTML's, JS, CSS...)
 	m.Use(martini.Static("static/"))
-
 
 	m.Run()
 
