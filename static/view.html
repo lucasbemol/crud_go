@@ -1,0 +1,52 @@
+	<div ng-controller="crudVisualizeController">	
+		<div id="main" class="container-fluid">
+			<div id="main" class="container-fluid">
+ 				<h3 class="page-header">Visualizar Produto</h3>
+ 				<div class="row">
+ 					<div class="col-md-3">
+					 	<p><strong>Id - Produto</strong></p>
+					 	<p ng-model="product.id_product">{{product.id_product}}</p>
+					</div>
+					<div class="col-md-3">
+					 	<p><strong>Nome do Produto</strong></p>
+					 	<p ng-model="product.name">{{product.name}}</p>
+					</div>
+					<div class="col-md-3">
+					 	<p><strong>Preço</strong></p>
+					 	<p ng-model="product.price">{{product.price}}</p>
+					</div>
+					<div class="col-md-3">
+					 	<p><strong>Data de Validade</strong></p>
+					 	<p ng-model="product.expiration_date">{{product.expiration_date}}</p>
+					</div>
+				</div>
+				<hr />
+				<div id="actions" class="row">
+				 	<div class="col-md-12">
+				  		<a href="#" ng-click="editProduct()"class="btn btn-primary">Editar</a>
+				  		<a href="/" class="btn btn-default">Fechar</a>
+				  		<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal">Excluir</a>
+				 	</div>
+				</div>
+		</div>		
+		<!-- Modal -->
+		<div ng-controller="crudDeleteController" class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+			  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+					    <div class="modal-header">
+					     	<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       	<h4 class="modal-title" id="modalLabel">Excluir Produto</h4>
+					    </div>
+				     	<div class="modal-body">
+				        	Deseja realmente excluir este produto?
+				      	</div>
+				      	<div class="modal-footer">
+				        	<button type="button" ng-click="deleteProduct(product.id_product)" data-dismiss="modal" class="btn btn-primary">Sim</button>
+				 			<button type="button" class="btn btn-default" data-dismiss="modal">N&atilde;o</button>
+				     	</div>
+				    </div>
+			  </div>
+		</div> 
+		<!-- /.modal -->
+
+	</div>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="crudApp" lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>CRUD - Golang Lucas</title>
+
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-datepicker3.min.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-datepicker.min.js"></script>
+		<script src="js/locales/bootstrap-datepicker.pt-BR.min.js" charset="UTF-8"></script>
+
+		<script src="js/lib/angular.js"></script>
+		<script src="js/lib/angular-route.js"></script>
+		<script src="js/lib/angular-resource.js"></script>
+		
+		<script type="text/javascript" src="js/lib/angular-input-masks.js"></script>
+
+		<script type="text/javascript" src="js/crud/crud-application.js"></script>
+		<script type="text/javascript" src="js/crud/crud-service.js"></script>
+		<script type="text/javascript" src="js/crud/crud-list.js"></script>
+		<script type="text/javascript" src="js/crud/crud-visualize.js"></script>
+		<script type="text/javascript" src="js/crud/crud-delete.js"></script>
+		<script type="text/javascript" src="js/crud/crud-add.js"></script>
+		<script type="text/javascript" src="js/crud/crud-edit.js"></script>
+
+		<base href="/">
+
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			 <div class="container-fluid">
+				  <div class="navbar-header">
+					   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						    <span class="sr-only">Toggle navigation</span>
+						    <span class="icon-bar"></span>
+						    <span class="icon-bar"></span>
+						    <span class="icon-bar"></span>
+					   </button>
+				   <a class="navbar-brand" href="#">Golang - CRUD</a>
+				  </div>
+				  <div id="navbar" class="navbar-collapse collapse">
+					   <ul class="nav navbar-nav navbar-right">
+						    <li><a ng-href="/">Início</a></li>
+						    <li><a href="add">Sobre</a></li>
+					   </ul>
+				  </div>
+			 </div>
+		</nav> 
+		<div ng-view></div>
+		
+	</body>
+</html>

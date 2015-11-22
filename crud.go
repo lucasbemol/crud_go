@@ -14,6 +14,7 @@ import (
 )
 
 type Product struct {
+	Id_product int `json:"id_product"`
 	Name string `json:"name" binding:"required"`
 	Price float32 `json:"price"`
 	Expiration_date  string `json:"expiration_date"`
@@ -34,11 +35,11 @@ func main() {
 
 	//using martini-contrib/binding for receiving incoming JSON
 	m.Post("/product/add/data.json", binding.Json(Product{}), func(product Product, r render.Render) {
-		log.Println("Valores no produto")
-		log.Println(product.Name)
-		log.Println(product.Price)
-		log.Println(product.Expiration_date)
-
+		if err != nil {
+			log.Println(err.Error())
+			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
+			return
+		}
 		stmt, err := db.Prepare(`Insert Into product
 					 (name, price, expiration_date)
 					 Values (?, ?, ?)`)
@@ -59,7 +60,7 @@ func main() {
 	})
 
 	m.Get("/product/list", func(r render.Render) {
-		rows, err := db.Query(`Select name, price, expiration_date
+		rows, err := db.Query(`Select id_product, name, price, expiration_date
 				       From product`)
 		if err != nil {
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
@@ -72,7 +73,7 @@ func main() {
 		for rows.Next() {
 			//var tempID string
 			p := Product{}
-			rows.Scan(&p.Name, &p.Price, &p.Expiration_date)
+			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
 			//append things after the array
 			res = append(res, p)
 		}
@@ -80,9 +81,9 @@ func main() {
 		r.JSON(200, map[string]interface{}{"status": "success", "results": res})
 	})
 
-	m.Get("/product/:id", func(params martini.Params, r render.Render) {
+	m.Get("/product/search/:id", func(params martini.Params, r render.Render) {
 		//define SQL
-		stmt, err := db.Prepare(`Select name, price, expiration_date
+		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date
 					 From product
 					 Where id_product = ?`)
 		if err != nil {
@@ -92,7 +93,7 @@ func main() {
 		defer stmt.Close()
 		//execute with parameter
 		p := Product{}
-		err = stmt.QueryRow(params["id"]).Scan(&p.Name, &p.Price, &p.Expiration_date)
+		err = stmt.QueryRow(params["id"]).Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
 
 		if err != nil {
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
@@ -100,6 +101,39 @@ func main() {
 		}
 
 		r.JSON(200, map[string]interface{}{"status": "success", "results": p})
+	})
+
+	m.Get("/product/searchByName/:name", func(params martini.Params, r render.Render) {
+		//define SQL
+		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date
+					 From product
+					 Where name like ?`)
+		if err != nil {
+			log.Println(err.Error())
+			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
+			return
+		}
+		defer stmt.Close()
+
+		rows, err := stmt.Query(params["name"])
+		//execute with parameter
+		res := []Product{}
+		
+		if err != nil {
+			log.Println(err.Error())
+			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
+			return
+		}
+
+		for rows.Next() {
+			//var tempID string
+			p := Product{}
+			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
+			//append things after the array
+			res = append(res, p)
+		}
+
+		r.JSON(200, map[string]interface{}{"status": "success", "results": res})
 	})
 
 	m.Put("/product/:id/data.json", binding.Json(Product{}), func(params martini.Params, product Product, r render.Render) {
@@ -138,5 +172,9 @@ func main() {
 		r.JSON(200, map[string]interface{}{"status": "success"})
 	})
 
+	m.Use(martini.Static("static/"))
+
+
 	m.Run()
+
 }

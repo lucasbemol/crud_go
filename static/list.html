@@ -1,0 +1,79 @@
+	<div ng-controller="crudListController">	
+		<div id="main" class="container-fluid">
+			<div id="top" class="row">
+			 <div class="col-md-3">
+		        <h2>Produtos</h2>
+		    </div>
+		 
+		    <div class="col-md-6">
+		        <div class="input-group h2">
+		            <input name="data[search]" class="form-control" id="search" ng-model="searchName" type="text" placeholder="Pesquisar Produtos por Nome">
+		            <span class="input-group-btn">
+		                <button class="btn btn-primary" ng-click="searchByName()" type="submit">
+		                    <span class="glyphicon glyphicon-search"></span>
+		                </button>
+		            </span>
+		        </div>
+		    </div>
+		 
+		    <div class="col-md-3">
+		        <a href="add" class="btn btn-primary pull-right h2">Novo Produto</a>
+		    </div>
+			</div> <!-- /#top -->
+			 
+			<hr />
+		    <div id="list" class="row">
+			      <div class="table-responsive col-md-12">
+				        <table class="table table-striped" cellspacing="0" cellpadding="0">
+				            <thead>
+				                <tr>
+				                    <th>ID</th>
+				                    <th>Nome</th>
+				                    <th>Preço</th>
+				                    <th>Data de validade</th>
+				                    <th class="actions">Ações</th>
+				                 </tr>
+				            </thead>
+				            <tbody>
+				 
+				                <tr ng-repeat="product in productsList">
+				                    <td>{{product.id_product}}</td>
+				                    <td>{{product.name}}</td>
+				                    <td>R$ {{product.price}}</td>
+				                    <td>{{product.expiration_date}}</td>
+				                    <td class="actions">
+				                        <a class="btn btn-success btn-xs" ng-click="visualizeProduct(product.id_product)" href="#">Visualizar</a>
+				                        <a class="btn btn-warning btn-xs" ng-click="editProduct(product)" href="#">Editar</a>
+				                        <a class="btn btn-danger btn-xs" ng-click="prepareDelete(product.id_product)"  href="#" data-toggle="modal" data-target="#delete-modal">Excluir</a>
+				                    </td>
+				                </tr>
+				 
+				            </tbody>
+				         </table>
+    				</div>
+		    </div> <!-- /#list -->
+			 
+		    <div id="bottom" class="row">
+		  
+		    </div> <!-- /#bottom -->
+		</div>  <!-- /#main -->
+
+		<!-- Modal -->
+		<div ng-controller="crudDeleteController" class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+			  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+					    <div class="modal-header">
+					     	<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       	<h4 class="modal-title" id="modalLabel">Excluir Produto</h4>
+					    </div>
+				     	<div class="modal-body">
+				        	Deseja realmente excluir este produto?
+				      	</div>
+				      	<div class="modal-footer">
+				        	<button type="button" ng-click="deleteProductByList()" data-dismiss="modal" class="btn btn-primary">Sim</button>
+				 			<button type="button" class="btn btn-default" data-dismiss="modal">N&atilde;o</button>
+				     	</div>
+				    </div>
+			  </div>
+		</div> <!-- /.modal -->
+	</di>
