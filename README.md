@@ -19,6 +19,7 @@ Para executar a aplicação basta entrar com o comando:
 
 Para executar os testes unitários entre com o comando:
 * go test crud_test.go
+
 OBS: A Aplicação precisa estar iniciada para executar os testes, pois se tratam de chamadas HTTP(para o Rest)
 
 #Tecnologias
