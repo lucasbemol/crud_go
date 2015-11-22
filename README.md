@@ -14,6 +14,13 @@ Para configurar o acesso ao Banco de dados MySQL precisamos editar o arquivo cru
 altere o usuário e senha conforme as configurações de seu database, ex: sql.Open("mysql", "root:lucasbemol@tcp(localhost:3306)/crud")
 A Aplicação vai criar o schema crud e tabela Product ao iniciar.
 
+Para executar a aplicação basta entrar com o comando:
+* go run crud.go
+
+Para executar os testes unitários entre com o comando:
+* go test crud_test.go
+OBS: A Aplicação precisa estar iniciada para executar os testes, pois se tratam de chamadas HTTP(para o Rest)
+
 #Tecnologias
 
 * Golang 1.5.1
