@@ -3,7 +3,7 @@ package main
 
 import (
 	"log"
-	
+
 	//Para RESTful API
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
@@ -21,6 +21,7 @@ type Product struct {
 	Name string `json:"name" binding:"required"`
 	Price float32 `json:"price"`
 	Expiration_date  string `json:"expiration_date"`
+	Owner string `json:"owner"`
 }
 
 func main() {
@@ -31,7 +32,7 @@ func main() {
 	log.Println("Tentando se concectar na base")
 	//Configure aqui seu usuário e senha do Mysql (Deve ter permissão para crear shchema e tables,
 	//para inicar a base aconselho usar root )
-	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/")
+	db, err := sql.Open("mysql", "root:zxvf.321@tcp(localhost:3306)/")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,12 +56,13 @@ func main() {
 				  		name VARCHAR(200) NULL,
 				  		price DECIMAL(10,2) NULL,
 				  		expiration_date DATE NULL,
+							owner VARCHAR(20) NULL,
 				  		PRIMARY KEY (id_product));`)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	
+
 
 	//Controller para adicionar produto
 	m.Post("/product/add/data.json", binding.Json(Product{}), func(product Product, r render.Render) {
@@ -70,15 +72,15 @@ func main() {
 			return
 		}
 		stmt, err := db.Prepare(`Insert Into product
-					 (name, price, expiration_date)
-					 Values (?, ?, ?)`)
+					 (name, price, expiration_date, owner)
+					 Values (?, ?, ?, ?)`)
 		if err != nil {
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
 			return
 		}
 		defer stmt.Close()
 
-		_, err = stmt.Exec(product.Name, product.Price, product.Expiration_date)
+		_, err = stmt.Exec(product.Name, product.Price, product.Expiration_date, product.Owner)
 
 		if err != nil {
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
@@ -89,9 +91,10 @@ func main() {
 	})
 
 	//Controler para listar todos os produtos
-	m.Get("/product/list", func(r render.Render) {
-		rows, err := db.Query(`Select id_product, name, price, expiration_date
-				       From product`)
+	m.Get("/product/list/:owner", func(params martini.Params, r render.Render) {
+		rows, err := db.Query(`Select id_product, name, price, expiration_date, owner
+				       From product
+							 WHERE owner = ?`, params["owner"])
 		if err != nil {
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
 			return
@@ -101,7 +104,7 @@ func main() {
 		res := []Product{}
 		for rows.Next() {
 			p := Product{}
-			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
+			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date, &p.Owner)
 			res = append(res, p)
 		}
 
@@ -110,7 +113,7 @@ func main() {
 
 	//Controller para procurar por ID
 	m.Get("/product/search/:id", func(params martini.Params, r render.Render) {
-		
+
 		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date
 					 From product
 					 Where id_product = ?`)
@@ -119,7 +122,7 @@ func main() {
 			return
 		}
 		defer stmt.Close()
-		
+
 		p := Product{}
 		err = stmt.QueryRow(params["id"]).Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
 
@@ -132,11 +135,11 @@ func main() {
 	})
 
 	//Controller para buscar por Nome do produto
-	m.Get("/product/searchByName/:name", func(params martini.Params, r render.Render) {
-		
-		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date
+	m.Get("/product/searchByName/:name/:owner", func(params martini.Params, r render.Render) {
+
+		stmt, err := db.Prepare(`Select id_product, name, price, expiration_date, owner
 					 From product
-					 Where name like ?`)
+					 Where name like ? AND owner = ?`)
 		if err != nil {
 			log.Println(err.Error())
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
@@ -144,10 +147,10 @@ func main() {
 		}
 		defer stmt.Close()
 
-		rows, err := stmt.Query(params["name"])
-		
+		rows, err := stmt.Query(params["name"], params["owner"])
+
 		res := []Product{}
-		
+
 		if err != nil {
 			log.Println(err.Error())
 			r.JSON(500, map[string]interface{}{"status": "error", "message": err.Error()})
@@ -156,7 +159,7 @@ func main() {
 
 		for rows.Next() {
 			p := Product{}
-			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date)
+			rows.Scan(&p.Id_product, &p.Name, &p.Price, &p.Expiration_date, &p.Owner)
 			res = append(res, p)
 		}
 
