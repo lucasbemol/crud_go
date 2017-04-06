@@ -8,7 +8,7 @@
 					   	<input type="text" name="name" ng-model="product.name" class="form-control" id="campo1" required>
 					   	<div ng-show="formEdit.$submitted || formEdit.name.$touched"><span style="color:red" ng-show="formEdit.name.$error.required">Nome é obrigatório.</span></div>
 					 </div>
-					 
+
 					 <div class="form-group col-md-4">
 					   	<label for="campo2">Preço</label>
 					   	<div class="input-group">
@@ -17,21 +17,21 @@
 						</div>
 						<div ng-show="formEdit.$submitted || formEdit.price.$touched"><span style="color:red" ng-show="formEdit.price.$error.required">Preço é obrigatório.</span></div>
 					 </div>
-					 
+
 					 <div class="form-group col-md-4">
 					   	<label for="campo3">Data de validade</label>
 					   	<input ng-readonly="true" data-provide="datepicker-inline" name="data_expiration" ng-model="product.expiration_date" class="form-control datepicker" id="campo3" required>
 					   	<div ng-show="formEdit.$submitted || formEdit.data_expiration.$touched"><span style="color:red" ng-show="formEdit.data_expiration.$error.required">Data de validade é obrigatório.</span></div>
 					 </div>
-					
+
 				</div>
 			 	<hr />
 			  	<div id="actions" class="row">
 				    <div class="col-md-12">
 				      	<button type="submit" ng-click="editProduct()" class="btn btn-primary">Salvar</button>
-				      	<a href="\" class="btn btn-default">Cancelar</a>
+				      	<a href="\list" class="btn btn-default">Cancelar</a>
 				    </div>
 			  	</div>
 			</form>
 		</div>
-	</div>		
+	</div>

@@ -1,11 +1,11 @@
 var crudList = angular.module('crud-list', ['crud-services']);
 
-crudList.controller('crudListController', ['$rootScope', '$scope', '$location', 'CrudActions', 'shareDataService', 
+crudList.controller('crudListController', ['$rootScope', '$scope', '$location', 'CrudActions', 'shareDataService',
                                                              function ($rootScope, $scope, $location, CrudActions, shareDataService) {
 
 	$scope.productsList = {};
 
-	CrudActions.list(function(data){
+	CrudActions.list({ owner : shareDataService.getValue('owner') }, function(data){
 		$scope.productsList = data.results;
 	});
 
@@ -32,9 +32,9 @@ crudList.controller('crudListController', ['$rootScope', '$scope', '$location', 
 			});
 		}else{
 			var name = '%' + $scope.searchName + '%';
-			CrudActions.searchByName({ name : name }, function(data){
+			CrudActions.searchByName({ name : name, owner : shareDataService.getValue('owner') }, function(data){
 				$scope.productsList = data.results;
-			});	
+			});
 		}
 	};
 

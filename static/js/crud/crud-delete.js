@@ -10,13 +10,13 @@ crudDelete.controller('crudDeleteController', ['$rootScope', '$scope', '$locatio
 		$('body').removeClass('modal-open');
 		$('.modal-backdrop').remove();
 		CrudActions.delete({ id_product : id_product},function(data){
-			$scope.result = data.status;		
+			$scope.result = data.status;
 			if($scope.result == 'success'){
 				alert('Produto excluído com sucesso!');
 			}else{
 				alert('Erro ao excluir produto!');
 			}
-			$location.path("/");
+			$location.path("/list");
 		});
 	};
 
@@ -27,7 +27,7 @@ crudDelete.controller('crudDeleteController', ['$rootScope', '$scope', '$locatio
 		$('body').removeClass('modal-open');
 		$('.modal-backdrop').remove();
 		CrudActions.delete({ id_product : id_to_delete},function(data){
-			$scope.result = data.status;		
+			$scope.result = data.status;
 			if($scope.result == 'success'){
 				alert('Produto excluído com sucesso!');
 			}else{
@@ -35,6 +35,6 @@ crudDelete.controller('crudDeleteController', ['$rootScope', '$scope', '$locatio
 			}
 			$route.reload();
 		});
-	};                                                              	
+	};
 
 }]);

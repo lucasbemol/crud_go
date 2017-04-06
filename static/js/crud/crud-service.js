@@ -10,7 +10,7 @@ crudServices.factory('CrudActions', ['$resource', function ($resource) {
 		},
 		'list': {
 			method	: 'GET',
-			url		: 'product/list'
+			url		: 'product/list/:owner'
 		},
 		'update': {
 			method	: 'PUT',
@@ -26,7 +26,7 @@ crudServices.factory('CrudActions', ['$resource', function ($resource) {
 		},
 		'searchByName': {
 			method	: 'GET',
-			url		: 'product/searchByName/:name'
+			url		: 'product/searchByName/:name/:owner'
 		}
 	});
 }]);

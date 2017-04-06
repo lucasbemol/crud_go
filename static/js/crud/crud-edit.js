@@ -2,7 +2,7 @@ var crudEdit = angular.module('crud-edit', ['crud-services']);
 
 crudEdit.controller('crudEditController', ['$rootScope', '$scope', '$location','CrudActions', 'shareDataService',
                                                              function ($rootScope, $scope, $location,CrudActions, shareDataService) {
-    
+
     $('.datepicker').datepicker({
  		format: 'yyyy/mm/dd',
  		language: 'pt-BR'
@@ -20,9 +20,9 @@ crudEdit.controller('crudEditController', ['$rootScope', '$scope', '$location','
 					alert('Erro ao editar produto!');
 				}
 
-				$location.path('/');
+				$location.path('/list');
 			});
 		}
-	}                                                             	
+	}
 
 }]);

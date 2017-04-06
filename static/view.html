@@ -1,4 +1,4 @@
-	<div ng-controller="crudVisualizeController">	
+	<div ng-controller="crudVisualizeController">
 		<div id="main" class="container-fluid">
 			<div id="main" class="container-fluid">
  				<h3 class="page-header">Visualizar Produto</h3>
@@ -24,11 +24,11 @@
 				<div id="actions" class="row">
 				 	<div class="col-md-12">
 				  		<a href="#" ng-click="editProduct()"class="btn btn-primary">Editar</a>
-				  		<a href="/" class="btn btn-default">Fechar</a>
+				  		<a href="/list" class="btn btn-default">Voltar</a>
 				  		<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal">Excluir</a>
 				 	</div>
 				</div>
-		</div>		
+		</div>
 		<!-- Modal -->
 		<div ng-controller="crudDeleteController" class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
 			  <div class="modal-dialog" role="document">
@@ -46,7 +46,7 @@
 				     	</div>
 				    </div>
 			  </div>
-		</div> 
+		</div>
 		<!-- /.modal -->
 
 	</div>

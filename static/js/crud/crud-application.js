@@ -8,6 +8,7 @@ var crudApp = angular.module('crudApp', [
     'crud-delete',
     'crud-add',
     'crud-edit',
+    'crud-owner',
     'ui.utils.masks'
 
 ]);
@@ -15,6 +16,10 @@ var crudApp = angular.module('crudApp', [
 crudApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider.
         when('/', {
+        	templateUrl 		: 'owner.html',
+            controller          : 'crudOwnerController'
+        }).
+        when('/list', {
         	templateUrl 		: 'list.html',
             controller          : 'crudListController'
         }).

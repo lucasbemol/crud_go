@@ -6,9 +6,11 @@ crudAdd.controller('crudAddController', ['$rootScope', '$scope', '$location','Cr
  		format: 'yyyy/mm/dd',
  		language: 'pt-BR'
  	});
- 
+
 	$scope.addProduct = function addProduct(){
 		if($scope.formAdd.$valid){
+
+      $scope.product.owner = shareDataService.getValue('owner');
 			CrudActions.add($scope.product,function(data){
 				$scope.result = data.status;
 				if($scope.result == 'success'){
@@ -16,9 +18,9 @@ crudAdd.controller('crudAddController', ['$rootScope', '$scope', '$location','Cr
 				}else{
 					alert('Erro ao adicionar produto: ' + $scope.result);
 				}
-				$location.path("/");
+				$location.path("/list");
 			});
 		}
-	}                                                             	
+	}
 
 }]);
