@@ -32,7 +32,7 @@ func main() {
 	log.Println("Tentando se concectar na base")
 	//Configure aqui seu usuário e senha do Mysql (Deve ter permissão para crear shchema e tables,
 	//para inicar a base aconselho usar root )
-	db, err := sql.Open("mysql", "root:zxvf.321@tcp(localhost:3306)/")
+	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/")
 	if err != nil {
 		log.Fatal(err)
 	}
