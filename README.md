@@ -3,14 +3,10 @@ Esta aplicação se trata de um CRUD feito em Golang por mim, Lucas Martins Ramo
 
 # Instruções
 Para executar a aplicação, precisamos baixar as dependências, com o GO instalado e configurado em seu computador execue os comandos:
-* go get github.com/codegangsta/martini
-* go get github.com/codegangsta/martini-contrib/binding
-* go get github.com/codegangsta/martini-contrib/render
-
-* go get github.com/go-sql-driver/mysql
+* go get
 
 Para configurar o acesso ao Banco de dados MySQL precisamos editar o arquivo crud.go.
-(linha 30), altere as configurações para seu database, a configuração defalt é: db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/crud")
+(linha 35), altere as configurações para seu database, a configuração defalt é: db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/crud")
 altere o usuário e senha conforme as configurações de seu database, ex: sql.Open("mysql", "root:lucasbemol@tcp(localhost:3306)/crud")
 A Aplicação vai criar o schema crud e tabela Product ao iniciar.
 
